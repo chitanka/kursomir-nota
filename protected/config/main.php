@@ -70,6 +70,8 @@ return array(
 				'catalog/<cat_id:\d+>' => 'catalog/index',
 
 				'site/login' => 'register/login',
+
+				['api/v1/slice/index', 'pattern' => 'api/v1/materials/<chapter_id:\d+>/slices', 'verb' => 'GET'],
 			),
 		),
 		"db" => [
