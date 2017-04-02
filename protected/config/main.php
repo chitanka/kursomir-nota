@@ -73,7 +73,7 @@ return array(
 			),
 		),
 		"db" => [
-			"connectionString" => "pgsql:host=localhost;dbname=notabenoid",
+			"connectionString" => "pgsql:host=db;dbname=notabenoid",
 			"username" => "notabenoid",
 			"password" => "",
 			"charset" => "utf8",
