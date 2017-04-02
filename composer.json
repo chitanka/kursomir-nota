@@ -1,0 +1,19 @@
+{
+    "name": "dmitrybasavin/kursomir-nota",
+    "type": "project",
+    "require": {
+        "league/fractal": "^0.15.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Дмитрий Басавин",
+            "email": "basavind@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Api\\": "protected/components/Api"
+        }
+    }
+}

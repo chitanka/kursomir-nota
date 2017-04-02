@@ -5,3 +5,5 @@
 /www/i/upic/*
 /www/i/tmp/*
 !.gitkeep
+
+/vendor/

@@ -1,5 +1,7 @@
 <?php
 
+require '../vendor/autoload.php';
+
 $utils = dirname(__FILE__) . '/../protected/utils.php';
 require_once($utils);
 
