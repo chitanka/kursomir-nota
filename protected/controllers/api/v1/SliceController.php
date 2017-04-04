@@ -9,8 +9,11 @@ class SliceController extends ApiController
     public function actionIndex($chapter_id)
     {
         $slices = Slice::model()
-            ->with('trs', 'trs.user')
-            ->findAllByAttributes(['chap_id' => (int) $chapter_id], ['order' => 't.id ASC']);
+            ->with('trs', 'trs.user', 'comments:cleanOrder')
+            ->findAllByAttributes(
+                ['chap_id' => (int) $chapter_id],
+                ['order' => 't.id ASC',]
+            );
 
         $resource = new Collection($slices, new SliceTransformer());
 
