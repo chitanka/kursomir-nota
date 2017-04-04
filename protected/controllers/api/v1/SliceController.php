@@ -6,12 +6,12 @@ use Orig as Slice;
 
 class SliceController extends ApiController
 {
-    public function actionIndex($chapter_id)
+    public function actionIndex($material_id)
     {
         $slices = Slice::model()
             ->with('trs', 'trs.user', 'trs.marks', 'comments:cleanOrder')
             ->findAllByAttributes(
-                ['chap_id' => (int) $chapter_id],
+                ['chap_id' => (int) $material_id],
                 ['order' => 't.id ASC',]
             );
 
