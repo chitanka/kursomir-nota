@@ -52,7 +52,8 @@ class Orig extends CActiveRecord {
 		$rel = array(
 			"chap"         => array(self::BELONGS_TO, "Chapter",     "chap_id"),
 			"book"         => array(self::BELONGS_TO, "Book",        "book_id"),
-			"trs" 		   => array(self::HAS_MANY,   "Translation", "orig_id")
+			"trs" 		   => array(self::HAS_MANY,   "Translation", "orig_id"),
+			"comments"	   => array(self::HAS_MANY,   "Comment",     "orig_id", "order" => 'comments.mp, comments.cdate'),
 		);
 		if(!Yii::app()->user->isGuest) {
 			$rel["seen"] = array(

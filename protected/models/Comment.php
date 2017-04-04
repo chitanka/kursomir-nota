@@ -47,6 +47,14 @@ class Comment extends CActiveRecord {
 		);
 	}
 
+	// В отношениях алиас 't' переходит к родительской сущности, и defaultScope
+	// ломает весь запрос. Чтобы не стрелять себе в ногу — наговнокодим добавив
+	// скоуп, котороый очистит порядок сортировки.
+	public function cleanOrder() {
+		$this->getDbCriteria()->order = "";
+		return;
+	}
+
 	public function newer($date) {
 		if($date != "") {
 			$this->getDbCriteria()->mergeWith(array(
