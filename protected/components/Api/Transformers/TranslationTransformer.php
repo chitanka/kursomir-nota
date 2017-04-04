@@ -32,6 +32,6 @@ class TranslationTransformer extends TransformerAbstract
 
     public function includeTranslator(Translation $translation)
     {
-        return $this->item($translation->user, new TranslatorTransformer());
+        return $this->item($translation->user, new UserTransformer());
     }
 }

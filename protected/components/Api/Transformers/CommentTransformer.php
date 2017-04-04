@@ -25,6 +25,6 @@ class CommentTransformer extends TransformerAbstract
 
     public function includeCommentator(Comment $comment)
     {
-        return $this->item($comment->author, new CommentatorTransformer());
+        return $this->item($comment->author, new UserTransformer());
     }
 }
