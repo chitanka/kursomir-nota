@@ -1,7 +1,18 @@
 <?php
 
+use League\Fractal\Manager;
+use Api\Serializers\FlatJsonSerializer;
+
 class ApiController extends CController
 {
+    protected $fractal;
+
+    public function __construct()
+    {
+        $this->fractal = new Manager();
+        $this->fractal->setSerializer(new FlatJsonSerializer());
+    }
+
     protected function response($body = '', $status = 200, $content_type = 'application/json')
     {
         $status_header = 'HTTP/1.1 '.$status.' '.$this->getStatusCodeMessage($status);
