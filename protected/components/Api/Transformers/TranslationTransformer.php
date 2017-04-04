@@ -8,6 +8,7 @@ use Translation;
 class TranslationTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
+        'rates',
         'translator',
     ];
 
@@ -18,9 +19,15 @@ class TranslationTransformer extends TransformerAbstract
             'translator' => $translation->user,
             'body' => $translation->body,
             'rating' => $translation->rating,
+            'rates' => $translation->marks,
             'created_at' => strtotime($translation->cdate),
             'updated_at' => strtotime($translation->cdate),
         ];
+    }
+
+    public function includeRates(Translation $translation)
+    {
+        return $this->collection($translation->marks, new RateTransformer());
     }
 
     public function includeTranslator(Translation $translation)

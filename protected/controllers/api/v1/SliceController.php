@@ -9,7 +9,7 @@ class SliceController extends ApiController
     public function actionIndex($chapter_id)
     {
         $slices = Slice::model()
-            ->with('trs', 'trs.user', 'comments:cleanOrder')
+            ->with('trs', 'trs.user', 'trs.marks', 'comments:cleanOrder')
             ->findAllByAttributes(
                 ['chap_id' => (int) $chapter_id],
                 ['order' => 't.id ASC',]
