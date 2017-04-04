@@ -17,6 +17,8 @@ class CommentatorTransformer extends TransformerAbstract
             'user_id' => $commentator->id,
             'nickname' => $commentator->login,
             'avatar' => $avatar_link,
+            'created_at' => strtotime($commentator->cdate)?:time(),
+            'updated_at' => strtotime($commentator->cdate)?:time(),
         ]);
     }
 }

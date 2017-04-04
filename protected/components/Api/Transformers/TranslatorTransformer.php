@@ -17,6 +17,8 @@ class TranslatorTransformer extends TransformerAbstract
             'user_id' => $translator->id,
             'nickname' => $translator->login,
             'avatar' => $avatar_link,
+            'created_at' => strtotime($translator->cdate),
+            'updated_at' => strtotime($translator->cdate),
         ]);
     }
 }

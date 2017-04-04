@@ -18,8 +18,8 @@ class TranslationTransformer extends TransformerAbstract
             'translator' => $translation->user,
             'body' => $translation->body,
             'rating' => $translation->rating,
-            'created_at' => $translation->cdate,
-            'updated_at' => $translation->cdate,
+            'created_at' => strtotime($translation->cdate),
+            'updated_at' => strtotime($translation->cdate),
         ];
     }
 
