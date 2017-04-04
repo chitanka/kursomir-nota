@@ -25,6 +25,8 @@ class SliceTransformer extends TransformerAbstract
             'body' => $slice->body,
             'translations' => $slice->trs,
             'comments' => $slice->comments,
+            'created_at' => time(),
+            'updated_at' => time(),
         ];
     }
 
