@@ -73,6 +73,15 @@ return array(
 
 				['api/v1/slice/index', 'pattern' => 'api/v1/materials/<material_id:\d+>/slices', 'verb' => 'GET'],
 				['api/v1/slice/show', 'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>', 'verb' => 'GET'],
+				[
+					'api/v1/translation/index',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations',
+					'verb' => 'GET'
+				], [
+					'api/v1/translation/show',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>',
+					'verb' => 'GET'
+				],
 			),
 		),
 		"db" => [
