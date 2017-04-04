@@ -52,4 +52,13 @@ class ApiController extends CController
 
         return (isset($codes[$status])) ? $codes[$status] : '';
     }
+
+    protected function json($resource)
+    {
+        $data = $this->fractal
+            ->createData($resource)
+            ->toJson();
+            
+        $this->response($data);
+    }
 }
