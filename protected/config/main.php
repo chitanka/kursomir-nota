@@ -72,6 +72,7 @@ return array(
 				'site/login' => 'register/login',
 
 				['api/v1/slice/index', 'pattern' => 'api/v1/materials/<material_id:\d+>/slices', 'verb' => 'GET'],
+				['api/v1/slice/show', 'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>', 'verb' => 'GET'],
 			),
 		),
 		"db" => [
