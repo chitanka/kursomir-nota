@@ -16,8 +16,11 @@ class SliceTransformer extends TransformerAbstract
     {
         return [
             'slice_id' => (int) $slice->id,
-            'material_id' => (int) $slice->chap_id,
-            'type' => 'text',
+            'type' => [
+                    'slice_type_id' => '1',
+                    'name' => 'text',
+                    'display_name' => 'текст',
+                ],
             'translatable' => 'true',
             'body' => $slice->body,
             'translations' => $slice->trs,

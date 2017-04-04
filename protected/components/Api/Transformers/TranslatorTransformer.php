@@ -13,10 +13,10 @@ class TranslatorTransformer extends TransformerAbstract
             "/i/upic/0/{$translator->id}-{$translator->upic[0]}.jpg" :
             null;
 
-        return [
+        return array_filter([
             'user_id' => $translator->id,
             'nickname' => $translator->login,
             'avatar' => $avatar_link,
-        ];
+        ]);
     }
 }

@@ -15,8 +15,6 @@ class TranslationTransformer extends TransformerAbstract
     {
         return [
             'translation_id' => $translation->id,
-            'material_id' => $translation->chap_id,
-            'slice_id' => $translation->orig_id,
             'translator' => $translation->user,
             'body' => $translation->body,
             'rating' => $translation->rating,
