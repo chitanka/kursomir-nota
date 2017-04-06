@@ -127,21 +127,22 @@ class TranslationController extends ApiController
     private function updateSlice($slice)
     {
         $slice->chap->setModified();
+        $book = $slice->chap->book;
 
         // Добавили новый перевод
-        if ($slice->chap->book->membership === null || $slice->chap->book->membership->status === '') {
+        if ($book->membership === null || $book->membership->status === '') {
             // Вступаем в группу, раз нас там не было
-            $slice->chap->book->membership = new GroupMember();
-            $slice->chap->book->membership->book_id = $slice->chap->book->id;
-            $slice->chap->book->membership->user_id = $this->user->user_id;
-            $slice->chap->book->membership->status = GroupMember::CONTRIBUTOR;
-            $slice->chap->book->membership->n_trs = 1;
-            $slice->chap->book->membership->rating = 0;
+            $book->membership = new GroupMember();
+            $book->membership->book_id = $book->id;
+            $book->membership->user_id = $this->user->user_id;
+            $book->membership->status = GroupMember::CONTRIBUTOR;
+            $book->membership->n_trs = 1;
+            $book->membership->rating = 0;
         } else {
             // Обновляем статистику группы
-            ++$slice->chap->book->membership->n_trs;
+            ++$book->membership->n_trs;
         }
-        $slice->chap->book->membership->last_tr = new CDbExpression('now()');
-        $slice->chap->book->membership->save(false);
+        $book->membership->last_tr = new CDbExpression('now()');
+        $book->membership->save(false);
     }
 }
