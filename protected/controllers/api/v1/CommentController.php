@@ -109,4 +109,28 @@ class CommentController extends ApiController
 
         $this->actionShow($material_id, $slice_id, $comment_id);
     }
+
+    public function actionDestroy($material_id, $slice_id, $comment_id)
+    {
+        $comment = Comment::model()
+            ->with('author')
+            ->findByAttributes(
+                ['id' => $comment_id, 'orig_id' => (int) $slice_id]
+            );
+
+        if ( ! $comment) {
+            $this->abort(404, "'Material', 'Slice' or 'Comment' was not found.");
+        }
+        if ($comment->author->id != $this->user->id) {
+            $this->abort(403, "You can't delete this comment.");
+        }
+
+        if ( ! $comment->delete()) {
+            $this->abort(500, $comment->getErrorsString());
+        }
+
+        $comment->orig->afterCommentRm($comment);
+
+        $this->response('', 204);
+    }
 }
