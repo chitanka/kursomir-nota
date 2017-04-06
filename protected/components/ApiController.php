@@ -2,15 +2,53 @@
 
 use League\Fractal\Manager;
 use Api\Serializers\FlatJsonSerializer;
+use Api\Jwt\Manager as JWTManager;
 
 class ApiController extends CController
 {
-    protected $fractal;
+    protected $tokenName = 'token';
+    protected $user;
 
-    public function __construct()
+    protected $fractal;
+    protected $tokenManager;
+
+    public function beforeAction($event)
     {
+        if (! $this->user) {
+            $this->abort(401);
+        }
+
+        return true;
+    }
+
+    public function init()
+    {
+        $this->tokenManager = new JWTManager(md5(Yii::app()->params->passwordSalt));
         $this->fractal = new Manager();
         $this->fractal->setSerializer(new FlatJsonSerializer());
+
+        $this->user = $this->getUser();
+
+        parent::init();
+    }
+
+    private function getUser()
+    {
+        if ( ! $token = $this->getToken()) {
+            return null;
+        }
+
+        try {
+            $token = $this->tokenManager->parse($token);
+        } catch (\Exception $e) {
+            $this->abort(401, 'token is not valid');
+        }
+
+        if ( ! $user = User::model()->findByPk($token->getClaim('user_id'))) {
+            $this->abort(401);
+        }
+
+        return $user;
     }
 
     protected function response($body = '', $status = 200, $content_type = 'application/json')
@@ -58,7 +96,12 @@ class ApiController extends CController
         $data = $this->fractal
             ->createData($resource)
             ->toJson();
-            
+
         $this->response($data);
+    }
+
+    protected function getToken()
+    {
+        return Yii::app()->request->cookies[$this->tokenName]->value;
     }
 }
