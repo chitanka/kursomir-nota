@@ -2,7 +2,8 @@
     "name": "dmitrybasavin/kursomir-nota",
     "type": "project",
     "require": {
-        "league/fractal": "^0.15.0"
+        "league/fractal": "^0.15.0",
+        "lcobucci/jwt": "^3.2"
     },
     "license": "MIT",
     "authors": [
