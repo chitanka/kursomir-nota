@@ -94,6 +94,8 @@ class TranslationController extends ApiController
                 'orig_id' => (int) $slice_id,
             ]);
 
+        if ( ! $translation) $this->abort(404, "'Material', 'Slice' or 'Translation' was not found.");
+
         $resource = new Item($translation, new TranslationTransformer());
 
         $this->json($resource);
