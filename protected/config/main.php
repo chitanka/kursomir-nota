@@ -95,6 +95,12 @@ return array(
 					'verb' => 'DELETE'
 				],
 
+				[
+					'api/v1/translation/rate',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>/rate',
+					'verb' => 'POST'
+				],
+
 				'api/settoken' => 'api/jwt/jwtize',
 			),
 		),
