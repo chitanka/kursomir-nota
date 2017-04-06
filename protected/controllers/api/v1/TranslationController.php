@@ -86,7 +86,7 @@ class TranslationController extends ApiController
 
     public function actionShow($material_id, $slice_id, $translation_id)
     {
-        $slice = Translation::model()
+        $translation = Translation::model()
             ->with('user', 'marks')
             ->findByAttributes([
                 'id' => (int) $translation_id,
@@ -94,7 +94,7 @@ class TranslationController extends ApiController
                 'orig_id' => (int) $slice_id,
             ]);
 
-        $resource = new Item($slice, new TranslationTransformer());
+        $resource = new Item($translation, new TranslationTransformer());
 
         $this->json($resource);
     }
