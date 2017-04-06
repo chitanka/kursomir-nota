@@ -64,7 +64,7 @@ class ApiController extends CController
 
     protected function abort($status = 400, $message = '')
     {
-        if (strlen($body) == 0) {
+        if (strlen($message) == 0) {
             $message = $this->getStatusCodeMessage($status);
         }
 
