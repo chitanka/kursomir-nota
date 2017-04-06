@@ -82,6 +82,8 @@ return array(
 					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>',
 					'verb' => 'GET'
 				],
+
+				'api/settoken' => 'api/jwt/jwtize',
 			),
 		),
 		"db" => [
