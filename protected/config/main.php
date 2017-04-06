@@ -79,6 +79,10 @@ return array(
 					'api/v1/comment/index',
 					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments',
 					'verb' => 'GET'
+				], [
+					'api/v1/comment/store',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments',
+					'verb' => 'POST'
 				],
 				[
 					'api/v1/comment/show',

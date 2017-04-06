@@ -20,6 +20,54 @@ class CommentController extends ApiController
         $this->json($resource);
     }
 
+    public function actionStore($material_id, $slice_id)
+    {
+        $data = $this->getJsonRequest();
+        $slice = Slice::model()
+            ->findByAttributes([
+                'id' => (int) $slice_id,
+                'chap_id' => (int) $material_id,
+            ]);
+
+        if ( ! $slice) {
+            $this->abort(404, "'Material' or 'Slice' was not found.");
+        }
+        if ( ! $slice->chap->can('comment')) {
+            $this->abort(403, "You can't comment this slice. ".$slice->chap->getWhoCanDoIt('comment', false));
+        }
+        if ( ! isset($data['body']) && empty($data['body'])) {
+            $this->abort(400, "Field 'body' is requred");
+        }
+        if (isset($data['parent_id'])) {
+            $parent = Comment::model()->findByPk((int) $data['parent_id']);
+            if ( ! $parent) {
+                $this->abort(400, 'Parent comment does not exist.');
+            }
+        }
+
+        $comment = new Comment();
+        $comment->orig = $slice;
+        $comment->orig_id = $slice->id;
+        $comment->body = $data['body'];
+        $comment->user_id = $this->user->id;
+
+        if ($parent) {
+            if ($parent->reply($comment)) {
+                $parent->orig->afterCommentAdd($comment, $parent);
+            } else {
+                $this->abort(500, $parent->getErrorsString());
+            }
+        } else {
+            if ( ! $comment->save()) {
+                $this->abort(500, $comment->getErrorsString());
+            }
+        }
+
+        $resource = new Item($comment, new CommentTransformer());
+
+        $this->json($resource);
+    }
+
     public function actionShow($material_id, $slice_id, $comment_id)
     {
         $comment = Comment::model()
