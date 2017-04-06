@@ -104,4 +104,11 @@ class ApiController extends CController
     {
         return Yii::app()->request->cookies[$this->tokenName]->value;
     }
+
+    protected function getJsonRequest()
+    {
+        $post = file_get_contents('php://input');
+
+        return CJSON::decode($post, true);
+    }
 }
