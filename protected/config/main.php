@@ -80,6 +80,11 @@ return array(
 					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments',
 					'verb' => 'GET'
 				],
+				[
+					'api/v1/comment/show',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments/<comment_id:\d+>',
+					'verb' => 'GET'
+				],
 				// Translations
 				[
 					'api/v1/translation/index',
