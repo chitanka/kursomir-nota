@@ -88,6 +88,10 @@ return array(
 					'api/v1/comment/show',
 					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments/<comment_id:\d+>',
 					'verb' => 'GET'
+				], [
+					'api/v1/comment/update',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments/<comment_id:\d+>',
+					'verb' => 'PUT'
 				],
 				// Translations
 				[

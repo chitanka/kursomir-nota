@@ -84,4 +84,29 @@ class CommentController extends ApiController
 
         $this->json($resource);
     }
+
+    public function actionUpdate($material_id, $slice_id, $comment_id)
+    {
+        $data = $this->getJsonRequest();
+        $comment = Comment::model()
+            ->with('author')
+            ->findByAttributes(
+                ['id' => $comment_id, 'orig_id' => (int) $slice_id]
+            );
+
+        if ( ! $comment) {
+            $this->abort(404, "'Material', 'Slice' or 'Comment' was not found.");
+        }
+        if ($comment->author->id != $this->user->id) {
+            $this->abort(403, "You can't edit this comment.");
+        }
+        if ( ! isset($data['body']) && empty($data['body'])) {
+            $this->abort(400, "Field 'body' is requred");
+        }
+
+        $comment->body = $data['body'];
+        $comment->save();
+
+        $this->actionShow($material_id, $slice_id, $comment_id);
+    }
 }
