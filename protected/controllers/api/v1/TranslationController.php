@@ -51,6 +51,39 @@ class TranslationController extends ApiController
         $this->actionShow($material_id, $slice_id, $translation->id);
     }
 
+    public function actionUpdate($material_id, $slice_id, $translation_id)
+    {
+        $data = $this->getJsonRequest();
+        if ( ! isset($data['body']) && empty($data['body'])) $this->abort(400, "Field 'body' is requred.");
+
+        $translation = Translation::model()
+            ->findByAttributes([
+                'id' => (int) $translation_id,
+                'chap_id' => (int) $material_id,
+                'orig_id' => (int) $slice_id,
+            ]);
+
+        if ( ! $translation) $this->abort(404, "'Material', 'Slice' or 'Translation' was not found.");
+
+        if($translation->orig->chap->book->membership->status != GroupMember::MODERATOR) {
+            if($translation->user_id == $this->user->id) {
+                $translation->rating = 0;
+                $translation->n_votes = 0;
+                $translation->removeMarks();
+            } else {
+                $this->abort(403, "You can't update this translation");
+            }
+        }
+
+        $translation->body = htmlentities($data['body']);
+
+        if (! $translation->save()) {
+            $this->abort(500, $translation->errorsString);
+        }
+
+        $this->actionShow($material_id, $slice_id, $translation->id);
+    }
+
     public function actionShow($material_id, $slice_id, $translation_id)
     {
         $slice = Translation::model()

@@ -85,6 +85,10 @@ return array(
 					'api/v1/translation/show',
 					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>',
 					'verb' => 'GET'
+				], [
+					'api/v1/translation/update',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>',
+					'verb' => 'PUT'
 				],
 
 				'api/settoken' => 'api/jwt/jwtize',
