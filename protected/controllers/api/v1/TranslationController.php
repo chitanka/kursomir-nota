@@ -99,6 +99,29 @@ class TranslationController extends ApiController
         $this->json($resource);
     }
 
+    public function actionDestroy($material_id, $slice_id, $translation_id)
+    {
+        $translation = Translation::model()
+            ->with('user', 'marks')
+            ->findByAttributes([
+                'id' => (int) $translation_id,
+                'chap_id' => (int) $material_id,
+                'orig_id' => (int) $slice_id,
+            ]);
+
+        if ( ! $translation) $this->abort(404, "'Material', 'Slice' or 'Translation' was not found.");
+
+        if($translation->user_id != $this->user->id && $translation->chap->book->membership->status != GroupMember::MODERATOR) {
+            $this->abort(403, "You can't update this translation");
+        }
+
+        if($translation->delete()) {
+			$translation->chap->setModified();
+		}
+
+        $this->response('', 204);
+    }
+
     private function updateSlice($slice)
     {
         $slice->chap->setModified();
