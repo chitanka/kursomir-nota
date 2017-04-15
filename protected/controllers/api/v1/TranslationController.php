@@ -3,16 +3,16 @@
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Api\Transformers\TranslationTransformer;
-use Orig as Slice;
+use Orig as Chunk;
 
 class TranslationController extends ApiController
 {
-    public function actionIndex($material_id, $slice_id)
+    public function actionIndex($material_id, $chunk_id)
     {
         $translations = Translation::model()
             ->with('user', 'marks')
             ->findAllByAttributes(
-                ['chap_id' => (int) $material_id, 'orig_id' => (int) $slice_id],
+                ['chap_id' => (int) $material_id, 'orig_id' => (int) $chunk_id],
                 ['order' => 't.id ASC']
             );
 
@@ -21,41 +21,41 @@ class TranslationController extends ApiController
         $this->json($resource);
     }
 
-    public function actionStore($material_id, $slice_id)
+    public function actionStore($material_id, $chunk_id)
     {
         $data = $this->getJsonRequest();
-        $slice = Slice::model()->findByAttributes([
-            'id' => (int) $slice_id, 'chap_id' => (int) $material_id,
+        $chunk = Chunk::model()->findByAttributes([
+            'id' => (int) $chunk_id, 'chap_id' => (int) $material_id,
         ]);
 
         // validation
         if ( ! isset($data['body']) && empty($data['body'])) {
             $this->abort(400, "Field 'body' is requred.");
         }
-        if ( ! $slice) {
-            $this->abort(404, "'Material' or 'Slice' was not found.");
+        if ( ! $chunk) {
+            $this->abort(404, "'Material' or 'Chunk' was not found.");
         }
 
         $translation = new Translation();
-        $translation->orig_id = $slice->id;
-        $translation->chap_id = $slice->chap->id;
-        $translation->book_id = $slice->chap->book->id;
+        $translation->orig_id = $chunk->id;
+        $translation->chap_id = $chunk->chap->id;
+        $translation->book_id = $chunk->chap->book->id;
         $translation->user_id = $this->user->id;
-        $translation->orig = $slice;
-        $translation->chap = $slice->chap;
-        $translation->book = $slice->chap->book;
+        $translation->orig = $chunk;
+        $translation->chap = $chunk->chap;
+        $translation->book = $chunk->chap->book;
         $translation->body = htmlentities($data['body']);
 
         if ( ! $translation->save()) {
             $this->abort(500, $translation->errorsString);
         }
 
-        $this->updateSlice($slice);
+        $this->updateSlice($chunk);
 
-        $this->actionShow($material_id, $slice_id, $translation->id);
+        $this->actionShow($material_id, $chunk_id, $translation->id);
     }
 
-    public function actionUpdate($material_id, $slice_id, $translation_id)
+    public function actionUpdate($material_id, $chunk_id, $translation_id)
     {
         $data = $this->getJsonRequest();
         if ( ! isset($data['body']) && empty($data['body'])) {
@@ -66,11 +66,11 @@ class TranslationController extends ApiController
             ->findByAttributes([
                 'id' => (int) $translation_id,
                 'chap_id' => (int) $material_id,
-                'orig_id' => (int) $slice_id,
+                'orig_id' => (int) $chunk_id,
             ]);
 
         if ( ! $translation) {
-            $this->abort(404, "'Material', 'Slice' or 'Translation' was not found.");
+            $this->abort(404, "'Material', 'Chunk' or 'Translation' was not found.");
         }
 
         if ($translation->orig->chap->book->membership->status != GroupMember::MODERATOR) {
@@ -89,21 +89,21 @@ class TranslationController extends ApiController
             $this->abort(500, $translation->errorsString);
         }
 
-        $this->actionShow($material_id, $slice_id, $translation->id);
+        $this->actionShow($material_id, $chunk_id, $translation->id);
     }
 
-    public function actionShow($material_id, $slice_id, $translation_id)
+    public function actionShow($material_id, $chunk_id, $translation_id)
     {
         $translation = Translation::model()
             ->with('user', 'marks')
             ->findByAttributes([
                 'id' => (int) $translation_id,
                 'chap_id' => (int) $material_id,
-                'orig_id' => (int) $slice_id,
+                'orig_id' => (int) $chunk_id,
             ]);
 
         if ( ! $translation) {
-            $this->abort(404, "'Material', 'Slice' or 'Translation' was not found.");
+            $this->abort(404, "'Material', 'Chunk' or 'Translation' was not found.");
         }
 
         $resource = new Item($translation, new TranslationTransformer());
@@ -111,17 +111,17 @@ class TranslationController extends ApiController
         $this->json($resource);
     }
 
-    public function actionDestroy($material_id, $slice_id, $translation_id)
+    public function actionDestroy($material_id, $chunk_id, $translation_id)
     {
         $translation = Translation::model()
             ->findByAttributes([
                 'id' => (int) $translation_id,
                 'chap_id' => (int) $material_id,
-                'orig_id' => (int) $slice_id,
+                'orig_id' => (int) $chunk_id,
             ]);
 
         if ( ! $translation) {
-            $this->abort(404, "'Material', 'Slice' or 'Translation' was not found.");
+            $this->abort(404, "'Material', 'Chunk' or 'Translation' was not found.");
         }
 
         if ($translation->user_id != $this->user->id && $translation->chap->book->membership->status != GroupMember::MODERATOR) {
@@ -135,18 +135,18 @@ class TranslationController extends ApiController
         $this->response('', 204);
     }
 
-    public function actionRate($material_id, $slice_id, $translation_id)
+    public function actionRate($material_id, $chunk_id, $translation_id)
     {
         $data = $this->getJsonRequest();
         $translation = Translation::model()
             ->findByAttributes([
                 'id' => (int) $translation_id,
                 'chap_id' => (int) $material_id,
-                'orig_id' => (int) $slice_id,
+                'orig_id' => (int) $chunk_id,
             ]);
 
         if ( ! $translation) {
-            $this->abort(404, "'Material', 'Slice' or 'Translation' was not found.");
+            $this->abort(404, "'Material', 'Chunk' or 'Translation' was not found.");
         }
         if ($translation->user_id == $this->user->id) {
             $this->abort(403, "You can't rate your own translation");
@@ -161,7 +161,7 @@ class TranslationController extends ApiController
 
         $this->updateRating($translation, $mark);
 
-        return $this->actionShow($material_id, $slice_id, $translation_id);
+        return $this->actionShow($material_id, $chunk_id, $translation_id);
     }
 
     private function updateRating($translation, $mark)
@@ -216,10 +216,10 @@ class TranslationController extends ApiController
         }
     }
 
-    private function updateSlice($slice)
+    private function updateSlice($chunk)
     {
-        $slice->chap->setModified();
-        $book = $slice->chap->book;
+        $chunk->chap->setModified();
+        $book = $chunk->chap->book;
 
         // Добавили новый перевод
         if ($book->membership === null || $book->membership->status === '') {

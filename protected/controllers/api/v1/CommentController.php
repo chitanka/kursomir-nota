@@ -3,16 +3,16 @@
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Api\Transformers\CommentTransformer;
-use Orig as Slice;
+use Orig as Chunk;
 
 class CommentController extends ApiController
 {
-    public function actionIndex($material_id, $slice_id)
+    public function actionIndex($material_id, $chunk_id)
     {
         $comments = Comment::model()
             ->with('author')
             ->findAllByAttributes(
-                ['orig_id' => (int) $slice_id]
+                ['orig_id' => (int) $chunk_id]
             );
 
         $resource = new Collection($comments, new CommentTransformer());
@@ -20,20 +20,20 @@ class CommentController extends ApiController
         $this->json($resource);
     }
 
-    public function actionStore($material_id, $slice_id)
+    public function actionStore($material_id, $chunk_id)
     {
         $data = $this->getJsonRequest();
-        $slice = Slice::model()
+        $chunk = Chunk::model()
             ->findByAttributes([
-                'id' => (int) $slice_id,
+                'id' => (int) $chunk_id,
                 'chap_id' => (int) $material_id,
             ]);
 
-        if ( ! $slice) {
-            $this->abort(404, "'Material' or 'Slice' was not found.");
+        if ( ! $chunk) {
+            $this->abort(404, "'Material' or 'Chunk' was not found.");
         }
-        if ( ! $slice->chap->can('comment')) {
-            $this->abort(403, "You can't comment this slice. ".$slice->chap->getWhoCanDoIt('comment', false));
+        if ( ! $chunk->chap->can('comment')) {
+            $this->abort(403, "You can't comment this chunk. ".$chunk->chap->getWhoCanDoIt('comment', false));
         }
         if ( ! isset($data['body']) && empty($data['body'])) {
             $this->abort(400, "Field 'body' is requred");
@@ -46,8 +46,8 @@ class CommentController extends ApiController
         }
 
         $comment = new Comment();
-        $comment->orig = $slice;
-        $comment->orig_id = $slice->id;
+        $comment->orig = $chunk;
+        $comment->orig_id = $chunk->id;
         $comment->body = $data['body'];
         $comment->user_id = $this->user->id;
 
@@ -68,16 +68,16 @@ class CommentController extends ApiController
         $this->json($resource);
     }
 
-    public function actionShow($material_id, $slice_id, $comment_id)
+    public function actionShow($material_id, $chunk_id, $comment_id)
     {
         $comment = Comment::model()
             ->with('author')
             ->findByAttributes(
-                ['id' => $comment_id, 'orig_id' => (int) $slice_id]
+                ['id' => $comment_id, 'orig_id' => (int) $chunk_id]
             );
 
         if ( ! $comment) {
-            $this->abort(404, "'Material', 'Slice' or 'Comment' was not found.");
+            $this->abort(404, "'Material', 'Chunk' or 'Comment' was not found.");
         }
 
         $resource = new Item($comment, new CommentTransformer());
@@ -85,17 +85,17 @@ class CommentController extends ApiController
         $this->json($resource);
     }
 
-    public function actionUpdate($material_id, $slice_id, $comment_id)
+    public function actionUpdate($material_id, $chunk_id, $comment_id)
     {
         $data = $this->getJsonRequest();
         $comment = Comment::model()
             ->with('author')
             ->findByAttributes(
-                ['id' => $comment_id, 'orig_id' => (int) $slice_id]
+                ['id' => $comment_id, 'orig_id' => (int) $chunk_id]
             );
 
         if ( ! $comment) {
-            $this->abort(404, "'Material', 'Slice' or 'Comment' was not found.");
+            $this->abort(404, "'Material', 'Chunk' or 'Comment' was not found.");
         }
         if ($comment->author->id != $this->user->id) {
             $this->abort(403, "You can't edit this comment.");
@@ -107,19 +107,19 @@ class CommentController extends ApiController
         $comment->body = $data['body'];
         $comment->save();
 
-        $this->actionShow($material_id, $slice_id, $comment_id);
+        $this->actionShow($material_id, $chunk_id, $comment_id);
     }
 
-    public function actionDestroy($material_id, $slice_id, $comment_id)
+    public function actionDestroy($material_id, $chunk_id, $comment_id)
     {
         $comment = Comment::model()
             ->with('author')
             ->findByAttributes(
-                ['id' => $comment_id, 'orig_id' => (int) $slice_id]
+                ['id' => $comment_id, 'orig_id' => (int) $chunk_id]
             );
 
         if ( ! $comment) {
-            $this->abort(404, "'Material', 'Slice' or 'Comment' was not found.");
+            $this->abort(404, "'Material', 'Chunk' or 'Comment' was not found.");
         }
         if ($comment->author->id != $this->user->id) {
             $this->abort(403, "You can't delete this comment.");

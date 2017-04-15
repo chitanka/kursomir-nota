@@ -2,35 +2,35 @@
 
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
-use Api\Transformers\SliceTransformer;
-use Orig as Slice;
+use Api\Transformers\ChunkTransformer;
+use Orig as Chunk;
 
-class SliceController extends ApiController
+class ChunkController extends ApiController
 {
     public function actionIndex($material_id)
     {
-        $slices = Slice::model()
+        $chunks = Chunk::model()
             ->with('trs', 'trs.user', 'trs.marks', 'comments:cleanOrder')
             ->findAllByAttributes(
                 ['chap_id' => (int) $material_id],
                 ['order' => 't.id ASC',]
             );
 
-        $resource = new Collection($slices, new SliceTransformer());
+        $resource = new Collection($chunks, new ChunkTransformer());
 
         $this->response($this->fractal->createData($resource)->toJson());
     }
 
-    public function actionShow($material_id, $slice_id)
+    public function actionShow($material_id, $chunk_id)
     {
-        $slice = Slice::model()
+        $chunk = Chunk::model()
             ->with('trs', 'trs.user', 'trs.marks', 'comments:cleanOrder')
             ->findByAttributes(
-                ['id' => (int) $slice_id, 'chap_id' => (int) $material_id],
+                ['id' => (int) $chunk_id, 'chap_id' => (int) $material_id],
                 ['order' => 't.id ASC',]
             );
 
-        $resource = new Item($slice, new SliceTransformer);
+        $resource = new Item($chunk, new ChunkTransformer);
 
         $this->response($this->fractal->createData($resource)->toJson());
     }

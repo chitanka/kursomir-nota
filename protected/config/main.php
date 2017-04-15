@@ -71,58 +71,58 @@ return array(
 
 				'site/login' => 'register/login',
 
-				// Slices
-				['api/v1/slice/index', 'pattern' => 'api/v1/materials/<material_id:\d+>/slices', 'verb' => 'GET'],
-				['api/v1/slice/show', 'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>', 'verb' => 'GET'],
+				// Chunks
+				['api/v1/chunk/index', 'pattern' => 'api/v1/materials/<material_id:\d+>/chunks', 'verb' => 'GET'],
+				['api/v1/chunk/show', 'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>', 'verb' => 'GET'],
 				// Comments
 				[
 					'api/v1/comment/index',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/comments',
 					'verb' => 'GET'
 				], [
 					'api/v1/comment/store',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/comments',
 					'verb' => 'POST'
 				],
 				[
 					'api/v1/comment/show',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments/<comment_id:\d+>',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/comments/<comment_id:\d+>',
 					'verb' => 'GET'
 				], [
 					'api/v1/comment/update',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments/<comment_id:\d+>',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/comments/<comment_id:\d+>',
 					'verb' => 'PUT'
 				], [
 					'api/v1/comment/destroy',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/comments/<comment_id:\d+>',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/comments/<comment_id:\d+>',
 					'verb' => 'DELETE'
 				],
 				// Translations
 				[
 					'api/v1/translation/index',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/translations',
 					'verb' => 'GET'
 				], [
 					'api/v1/translation/store',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/translations',
 					'verb' => 'POST'
 				], [
 					'api/v1/translation/show',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/translations/<translation_id:\d+>',
 					'verb' => 'GET'
 				], [
 					'api/v1/translation/update',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/translations/<translation_id:\d+>',
 					'verb' => 'PUT'
 				], [
 					'api/v1/translation/destroy',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/translations/<translation_id:\d+>',
 					'verb' => 'DELETE'
 				],
 				// Rating
 				[
 					'api/v1/translation/rate',
-					'pattern' => 'api/v1/materials/<material_id:\d+>/slices/<slice_id:\d+>/translations/<translation_id:\d+>/rate',
+					'pattern' => 'api/v1/materials/<material_id:\d+>/chunks/<chunk_id:\d+>/translations/<translation_id:\d+>/rate',
 					'verb' => 'POST'
 				],
 
